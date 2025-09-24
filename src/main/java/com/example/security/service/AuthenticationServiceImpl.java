@@ -52,13 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         if (!auth){
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        request.getUsername(),
-//                        request.getPassword()
-//                )
-//        );
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
 
         var token = generateToken(user);
         return AuthenticationResponse.builder()
@@ -85,7 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             jwsObject.sign(new MACSigner(SINGER_KEY.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
-            throw new RuntimeException(e);
+            throw new AppException(ErrorCode.EXCEPTION);
         }
     }
     private String buildScope(User user){

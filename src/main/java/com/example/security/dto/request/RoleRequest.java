@@ -18,5 +18,4 @@ public class RoleRequest {
 
     public void setName(String name) {
         this.name = (name != null ? name.trim() : null);
-//        this.name = name.trim();
     }}

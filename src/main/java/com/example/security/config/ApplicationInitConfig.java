@@ -28,12 +28,12 @@ public class ApplicationInitConfig {
     static final String ADMIN_USER_NAME = "admin";
 
     @NonFinal
-    final String ADMIN_PASSWORD = "admin1234";
+    static final String ADMIN_PASSWORD = "adminPassword";
     @NonFinal
     static final String USER_NAME = "user";
 
     @NonFinal
-    final String USER_PASSWORD = "user1234";
+    static final String USER_PASSWORD = "userPassword";
     @NonFinal
     static final String ROLE_ADMIN = "ROLE_ADMIN";
     @NonFinal
