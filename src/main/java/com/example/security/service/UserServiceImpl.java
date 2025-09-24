@@ -118,11 +118,10 @@ public class UserServiceImpl implements UserService{
     public MessageResponse getMsg(String msg) {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        MessageResponse response = MessageResponse.builder()
+        return MessageResponse.builder()
                 .username(name)
                 .msg(msg)
                 .build();
-        return response;
     }
 
 }

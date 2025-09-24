@@ -1,12 +1,14 @@
 package com.example.security.exception;
 
 import com.example.security.dto.response.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse<String>> handlingAppException(AppException e){
@@ -22,8 +24,10 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.INVALID_KEY;
         try {
             errorCode = ErrorCode.valueOf(enumKey);
-        } catch (IllegalArgumentException ignored){}
-
+        } catch (IllegalArgumentException ignored){
+            errorCode = ErrorCode.EXCEPTION; // fallback
+            log.warn("Invalid enum key: {}", enumKey, e);
+        }
         ApiResponse<String> apiResponse = new ApiResponse<String>();
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());
