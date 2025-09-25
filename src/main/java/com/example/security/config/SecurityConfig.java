@@ -55,10 +55,7 @@ public class SecurityConfig {
            ;
         });
         httpSecurity.cors(Customizer.withDefaults());
-        httpSecurity.csrf(csrf -> csrf
-                // Disable CSRF only for API endpoints
-                .ignoringRequestMatchers("/api/**")
-        );
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
     }
     @Bean

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 public enum ErrorCode {
     EXCEPTION(9999, "Uncategorized error", HttpStatus.BAD_REQUEST),
+    ERROR_PASS(400, "PassWord was wrong", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED( 401, "Authentication required",HttpStatus.UNAUTHORIZED ),
     FORBIDDEN( 403, "Access is denied",HttpStatus.FORBIDDEN ),
     INVALID_KEY(999, "Invalid message key", HttpStatus.BAD_REQUEST),

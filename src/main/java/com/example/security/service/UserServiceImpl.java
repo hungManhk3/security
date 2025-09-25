@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('ADMIN','USER') or #id == authentication.principal.id")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
