@@ -46,6 +46,8 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     protected String SINGER_KEY;
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        log.info("Signerkey: {}", SINGER_KEY);
+
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.EXCEPTION));
         boolean auth =  passwordEncoder.matches(request.getPassword(), user.getPassword());
