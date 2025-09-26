@@ -1,0 +1,54 @@
+services:
+  postgres:
+    container_name: postgres-db-id
+    image: postgres
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: security
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../docker/initdb:/docker-entrypoint-initdb.d:ro # seed init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - spring-demo
+    restart: unless-stopped
+  app:
+    container_name: identity-service2
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: identity-service-app:latest
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/security
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "${APP_PORT}:8080"
+    networks:
+      - spring-demo
+
+  adminer:
+    image: adminer:latest
+    container_name: adminerr
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+    networks:
+      - spring-demo
+
+networks:
+  spring-demo:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

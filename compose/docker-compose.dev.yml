@@ -1,0 +1,56 @@
+services:
+  postgres:
+    container_name: postgres-sql-dev-s
+    image: postgres
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: security
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../docker/initdb:/docker-entrypoint-initdb.d   # seed init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - spring-demo
+    restart: unless-stopped
+
+  app:
+    container_name: security
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/security
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+    volumes:
+      - ../src:/workspace/src           # hot reload code (nếu dùng DevTools)
+      - ../config:/workspace/config     # mount config ngoài
+    depends_on:
+      - postgres
+    networks:
+      - spring-demo
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+    networks:
+      - spring-demo
+
+networks:
+  spring-demo:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
