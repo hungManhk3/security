@@ -55,7 +55,10 @@ public class SecurityConfig {
            ;
         });
         httpSecurity.cors(Customizer.withDefaults());
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+//        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**")
+        );
         return httpSecurity.build();
     }
     @Bean
